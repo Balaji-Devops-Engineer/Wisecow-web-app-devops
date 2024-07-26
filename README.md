@@ -20,11 +20,11 @@ We will use Docker to containerize the wisecow-web application. Docker is a cont
 
 Commands to build the Docker container:
 
-docker build -t <your-docker-username>/wisecow-web .
+docker build -t <your-docker-username>/wisecow .
 
 Command to run the Docker container:
 
-docker run -p 4499:4499 <your-docker-username>/wisecow-web
+docker run -p 4499:4499 <your-docker-username>/wisecow
 
 Command to push the Docker container to Docker Hub:
 
