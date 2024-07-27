@@ -20,16 +20,81 @@ We will use Docker to containerize the wisecow-web application. Docker is a cont
 
 Commands to build the Docker container:
 
-docker build -t <your-docker-username>/wisecow .
+	docker build -t <your-docker-username>/wisecow .
 
 Command to run the Docker container:
 
-docker run -p 4499:4499 <your-docker-username>/wisecow
+	docker run -p 4499:4499 <your-docker-username>/wisecow
 
 Command to push the Docker container to Docker Hub:
 
-docker push <your-docker-username>/wisecow:latest
+	docker push <your-docker-username>/wisecow:latest
+
+TO Run this Containerize application you can use below pull command to pull the images and directly run a container using that image
+
+	docker pull balajif5/wisecow
+
+TO RUN Container use below commnad :
+
+	docker run -p 4499:4499 balajif5/wisecow:latest
+
+you can also expose to other port using the different port 
+ 
+
+Create Kubernetes manifests
+
+We have created kubernetes Manifest files to depoly this to kubernetes cluster.
+
+	deployment.yml
+	service.yml 
+
+
+Set up GitHub Action
+
+we have used github action to setup CI-CD workflow
+
+	CI_CD_Config.yml
 
 Continuous Integration (CI) and Continuous deployment
-
 Continuous Integration (CI) and Continuous deployment is the practice of automating the integration of code changes into a shared repository. CI helps to catch bugs early in the development process and ensures that the code is always in a deployable state.
+
+
+Enable secure TLS communication
+
+we have created the ingress manifest filw to enable the secure TLS communication
+
+	ingress.yml
+
+Steps to Enable TLS as follows :
+
+Create a trusted certificate using mkcert:
+
+   mkcert -install
+   mkcert wisecow.local 
+
+
+Create a Kubernetes secret for the certificate:
+
+	kubectl create secret tls wisecow-tls --key wisecow.local-key.pem --cert wisecow.local.pem
+
+
+Apply the ingress manifest:
+
+	kubectl apply -f ingress.yaml
+
+
+
+Update your /etc/hosts file to point to the Kubernetes node IP address:
+
+	echo "<node-ip> wisecow.local" >> /etc/hosts
+
+
+
+Access the Wisecow application using HTTPS:
+
+	https://wisecow.local:4499
+
+
+This should give you a secure connection to the Wisecow application. 
+
+***Note : You may need to accept the self-signed certificate warning in your browser.
